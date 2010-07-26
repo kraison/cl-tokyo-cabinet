@@ -366,15 +366,15 @@ occurs, the transaction will rollback, otherwise it will commit."
                 ,@body))
          (if *in-transaction-p*
              (atomic-op)
-           (unwind-protect
-                (let ((*in-transaction-p* t))
-                  (prog2
-                      (dbm-begin ,db)
-                      (atomic-op)
-                    (setf ,success t)))
-             (if ,success
-                 (dbm-commit ,db)
-               (dbm-abort ,db))))))))
+             (unwind-protect
+                  (let ((*in-transaction-p* t))
+                    (prog2
+                        (dbm-begin ,db)
+                        (atomic-op)
+                      (setf ,success t)))
+               (if ,success
+                   (dbm-commit ,db)
+                   (dbm-abort ,db))))))))
 
 (defmacro with-iterator ((var db) &body body)
   "Evaluates BODY on with VAR bound to a new, open iterator on DB."
@@ -415,7 +415,7 @@ are strings."
   (with-string-value (value-ptr (funcall fn (ptr-of db) key))
     (if (null-pointer-p value-ptr)
         (maybe-raise-error db "(key ~a)" key)
-      (foreign-string-to-lisp value-ptr))))
+        (foreign-string-to-lisp value-ptr))))
 
 (defun get-string->octets (db key fn)
   "Returns a value from DB under KEY using FN where the key is a
@@ -429,7 +429,7 @@ allocate a foreign string that is not null-terminated."
                                              key-ptr key-len size-ptr))
         (if (null-pointer-p value-ptr)
             (maybe-raise-error db "(key ~a)" key)
-          (copy-foreign-value value-ptr size-ptr))))))
+            (copy-foreign-value value-ptr size-ptr))))))
 
 ;; KTR
 (defun get-octets->octets (db key fn)
@@ -483,8 +483,8 @@ vector of octets and value is a string."
                                              key-ptr key-len size-ptr))
         (if (null-pointer-p value-ptr)
             (maybe-raise-error db "(key ~a)" key)
-          (foreign-string-to-lisp value-ptr
-                                  :count (mem-ref size-ptr :int)))))))
+            (foreign-string-to-lisp value-ptr
+                                    :count (mem-ref size-ptr :int)))))))
 
 (defun get-int32->octets (db key fn)
   "Returns a value from DB under KEY using FN where the key is a
@@ -500,7 +500,7 @@ vector of octets and value is a string."
                  value-ptr (funcall fn (ptr-of db) key-ptr key-len size-ptr))
            (if (null-pointer-p value-ptr)
                (maybe-raise-error db "(key ~a)" key)
-             (copy-foreign-value value-ptr size-ptr)))
+               (copy-foreign-value value-ptr size-ptr)))
       (when (and value-ptr (not (null-pointer-p value-ptr)))
         (foreign-free value-ptr)))))
 
