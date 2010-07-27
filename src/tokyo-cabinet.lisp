@@ -46,6 +46,9 @@
   "The 64bit built-in DBM key type."
   '(signed-byte 64))
 
+(deftype octet ()
+  '(unsigned-byte 8))
+
 (defparameter *in-transaction-p* nil
   "Bound when in a transaction.")
 
