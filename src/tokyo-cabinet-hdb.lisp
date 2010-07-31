@@ -134,6 +134,10 @@
   (declare (ignore remove-dups))
   (rem-string->value db key #'tchdbout2))
 
+(defmethod dbm-rem ((db tc-hdb) (key vector) &key remove-dups)
+  (declare (ignore remove-dups))
+  (rem-octets->value db key #'tchdbout))
+
 (defmethod dbm-rem ((db tc-hdb) (key integer) &key remove-dups)
   (declare (ignore remove-dups))
   (rem-int32->value db key #'tchdbout))
